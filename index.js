@@ -3,7 +3,18 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
+
+// Enable CORS - Add this BEFORE your routes
+app.use(cors({
+  origin: [
+    'https://uxclubadmin.vercel.app',  // Your production frontend
+    'http://localhost:5173',            // Your local development
+    'http://localhost:3000'             // Alternative local port
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // MongoDB Connection
@@ -48,5 +59,5 @@ app.get('/api/registrations', async (req, res) => {
   }
 });
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
